@@ -38,7 +38,7 @@ public class BoolStringTransform<R extends ConnectRecord<R>> implements Transfor
             }
             for (Field field : inputSchema.fields()) {
                 final Schema fieldSchema;
-                if (this.config.fieldList.equals(field.name())) {
+                if (this.config.fields.contains(field.name())) {
                     fieldSchema = field.schema().isOptional() ?
                             Schema.OPTIONAL_STRING_SCHEMA :
                             Schema.STRING_SCHEMA;
@@ -50,9 +50,32 @@ public class BoolStringTransform<R extends ConnectRecord<R>> implements Transfor
             Schema schema = builder.build();
             Struct struct = new Struct(schema);
             for (Field field : schema.fields()) {
-                if (this.config.fieldList.equals(field.name())) {
-                    List<String> list = inputRecord.getArray(this.config.fieldList);
-                    struct.put(field.name(), String.join(this.config.delimiter, list));
+                if (this.config.fields.contains(field.name())) {
+                    boolean v = inputRecord.getBoolean(field.name());
+                    String trueValue = null;
+                    String falseValue = null;
+                    switch (this.config.coercionType) {
+                        case BoolStringTransformConfig.COERCION_TYPE_ONEZERO:
+                            trueValue = "1";
+                            falseValue = "0";
+                            break;
+                        case BoolStringTransformConfig.COERCION_TYPE_TRUEFALSE:
+                            trueValue = "true";
+                            falseValue = "false";
+                            break;
+                        case BoolStringTransformConfig.COERCION_TYPE_YESNO:
+                            trueValue = "yes";
+                            falseValue = "no";
+                            break;
+                    }
+                    if (this.config.coercionCapitalize) {
+                        trueValue = trueValue.toUpperCase();
+                        falseValue = falseValue.toUpperCase();
+                    }
+                    if (this.config.coercionNullifyFalse) {
+                        falseValue = null;
+                    }
+                    struct.put(field.name(), v ? trueValue : falseValue);
                 } else {
                     struct.put(field.name(), inputRecord.get(field.name()));
                 }

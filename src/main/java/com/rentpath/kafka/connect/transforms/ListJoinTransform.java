@@ -38,7 +38,7 @@ public class ListJoinTransform<R extends ConnectRecord<R>> implements Transforma
             }
             for (Field field : inputSchema.fields()) {
                 final Schema fieldSchema;
-                if (this.config.fieldList.equals(field.name())) {
+                if (this.config.fields.contains(field.name())) {
                     fieldSchema = field.schema().isOptional() ?
                             Schema.OPTIONAL_STRING_SCHEMA :
                             Schema.STRING_SCHEMA;
@@ -50,8 +50,8 @@ public class ListJoinTransform<R extends ConnectRecord<R>> implements Transforma
             Schema schema = builder.build();
             Struct struct = new Struct(schema);
             for (Field field : schema.fields()) {
-                if (this.config.fieldList.equals(field.name())) {
-                    List<String> list = inputRecord.getArray(this.config.fieldList);
+                if (this.config.fields.contains(field.name())) {
+                    List<String> list = inputRecord.getArray(field.name());
                     struct.put(field.name(), String.join(this.config.delimiter, list));
                 } else {
                     struct.put(field.name(), inputRecord.get(field.name()));
