@@ -3,6 +3,7 @@ package com.rentpath.kafka.connect.transforms;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 
+import java.util.List;
 import java.util.Map;
 
 public class ListJoinTransformConfig extends AbstractConfig {
@@ -13,12 +14,12 @@ public class ListJoinTransformConfig extends AbstractConfig {
     static final String DELIMITER_DOC = "The delimiter to be used to join the elements of the list";
     static final String DELIMITER_DEFAULT = ",";
 
-    public final String fields;
+    public final List<String> fields;
     public final String delimiter;
 
     public ListJoinTransformConfig(Map<String, ?> parsedConfig) {
         super(config(), parsedConfig);
-        this.fields = getString(FIELDS_CONF);
+        this.fields = getList(FIELDS_CONF);
         this.delimiter = getString(DELIMITER_CONF);
     }
 
