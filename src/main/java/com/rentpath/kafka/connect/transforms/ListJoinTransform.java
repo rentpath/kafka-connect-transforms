@@ -52,6 +52,10 @@ public class ListJoinTransform<R extends ConnectRecord<R>> implements Transforma
             for (Field field : schema.fields()) {
                 if (this.config.fields.contains(field.name())) {
                     List<String> list = inputRecord.getArray(field.name());
+                    if (list == null) {
+                        struct.put(field.name(), null);
+                        continue;
+                    }
                     struct.put(field.name(), String.join(this.config.delimiter, list));
                 } else {
                     struct.put(field.name(), inputRecord.get(field.name()));

@@ -51,7 +51,11 @@ public class BoolStringTransform<R extends ConnectRecord<R>> implements Transfor
             Struct struct = new Struct(schema);
             for (Field field : schema.fields()) {
                 if (this.config.fields.contains(field.name())) {
-                    boolean v = inputRecord.getBoolean(field.name());
+                    Boolean v = inputRecord.getBoolean(field.name());
+                    if (v == null) {
+                        struct.put(field.name(), null);
+                        continue;
+                    }
                     String trueValue = null;
                     String falseValue = null;
                     switch (this.config.coercionType) {
