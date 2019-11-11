@@ -14,7 +14,7 @@ public class BoolCoercionTransformConfig extends AbstractConfig {
     static final String COERCION_FALSIFY_NULL_DOC = "Will a null value be interpreted as logical false or null (default)?";
     static final boolean COERCION_FALSIFY_NULL_DEFAULT = false;
 
-    public static final String COERCION_FALSIFY_EMPTY_CONF = "coercion.falsify.null";
+    public static final String COERCION_FALSIFY_EMPTY_CONF = "coercion.falsify.empty";
     static final String COERCION_FALSIFY_EMPTY_DOC = "Will an empty string value be interpreted as logical false or null (default)?";
     static final boolean COERCION_FALSIFY_EMPTY_DEFAULT = false;
 

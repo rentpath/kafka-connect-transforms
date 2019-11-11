@@ -19,11 +19,11 @@ public class StringSplitTransformConfig extends AbstractConfig {
     static final String ELEMENT_NULLIFY_EMPTY_DOC = "Whether empty elements in the split list (e.g. the second value of \"1,,2\") ought to be interpreted as null. If false (default), will interpret as empty string";
     static final boolean ELEMENT_NULLIFY_EMPTY_DEFAULT = false;
 
-    public static final String NULLIFY_EMPTY_CONF = "element.nullify.empty";
+    public static final String NULLIFY_EMPTY_CONF = "nullify.empty";
     static final String NULLIFY_EMPTY_DOC = "Whether an empty string source value should be interpreted as null or an empty list (default)";
     static final boolean NULLIFY_EMPTY_DEFAULT = false;
 
-    public static final String LISTIFY_NULL_CONF = "element.nullify.empty";
+    public static final String LISTIFY_NULL_CONF = "listify.null";
     static final String LISTIFY_NULL_DOC = "Whether a null sourc value should be interpreted as an empty list or null (default)";
     static final boolean LISTIFY_NULL_DEFAULT = false;
 
