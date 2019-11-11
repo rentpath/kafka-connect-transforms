@@ -17,11 +17,11 @@ import java.util.regex.Pattern;
 public class BoolCoercionTransform<R extends ConnectRecord<R>> implements Transformation<R> {
     private static final Logger log = LoggerFactory.getLogger(BoolCoercionTransform.class);
     public static final Pattern PATTERN_TRUE = Pattern.compile("(?i)^true$");
-    public static final Pattern PATTERN_FALSE = Pattern.compile("(?i)^false");
+    public static final Pattern PATTERN_FALSE = Pattern.compile("(?i)^false$");
     public static final Pattern PATTERN_ONE = Pattern.compile("^1$");
     public static final Pattern PATTERN_ZERO = Pattern.compile("^0$");
-    public static final Pattern PATTERN_YES = Pattern.compile("^yes$");
-    public static final Pattern PATTERN_NO = Pattern.compile("^yes$");
+    public static final Pattern PATTERN_YES = Pattern.compile("(?i)^yes$");
+    public static final Pattern PATTERN_NO = Pattern.compile("(?i)^no$");
 
     private BoolCoercionTransformConfig config;
 
