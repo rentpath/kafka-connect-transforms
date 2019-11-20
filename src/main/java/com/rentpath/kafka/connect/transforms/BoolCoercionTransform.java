@@ -79,10 +79,25 @@ public class BoolCoercionTransform<R extends ConnectRecord<R>> implements Transf
                         struct.put(field.name(), true);
                     else
                         throw new DataException(String.format("Field has non-boolean-interpretable string value: %s", v));
-                } else if (field.schema().type() == Schema.Type.INT8 ||
-                        field.schema().type() == Schema.Type.INT16 ||
-                        field.schema().type() == Schema.Type.INT32 ||
-                        field.schema().type() == Schema.Type.INT64) {
+                } else if (field.schema().type() == Schema.Type.INT8) {
+                    byte byteValue = inputRecord.getInt8(field.name());
+                    if (byteValue == 0)
+                        struct.put(field.name(), false);
+                    else
+                        struct.put(field.name(), true);
+                } else if (field.schema().type() == Schema.Type.INT16) {
+                    short shortValue = inputRecord.getInt16(field.name());
+                    if (shortValue == 0)
+                        struct.put(field.name(), false);
+                    else
+                        struct.put(field.name(), true);
+                } else if (field.schema().type() == Schema.Type.INT32) {
+                    int intValue = inputRecord.getInt32(field.name());
+                    if (intValue == 0)
+                        struct.put(field.name(), false);
+                    else
+                        struct.put(field.name(), true);
+                } else if (field.schema().type() == Schema.Type.INT64) {
                     long longValue = inputRecord.getInt64(field.name());
                     if (longValue == 0)
                         struct.put(field.name(), false);
