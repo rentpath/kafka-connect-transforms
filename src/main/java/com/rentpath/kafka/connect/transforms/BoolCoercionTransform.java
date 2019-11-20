@@ -83,7 +83,7 @@ public class BoolCoercionTransform<R extends ConnectRecord<R>> implements Transf
                         field.schema().type() == Schema.Type.INT16 ||
                         field.schema().type() == Schema.Type.INT32 ||
                         field.schema().type() == Schema.Type.INT64) {
-                    long longValue = inputRecord.getInt64(field.name());
+                    long longValue = (Long)inputRecord.get(field.name());
                     if (longValue == 0)
                         struct.put(field.name(), false);
                     else
