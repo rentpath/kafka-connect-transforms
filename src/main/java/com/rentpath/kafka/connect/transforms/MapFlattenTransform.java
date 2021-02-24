@@ -46,8 +46,10 @@ public class MapFlattenTransform<R extends ConnectRecord<R>> implements Transfor
             Schema oldFieldSchema = field.schema();
             if (this.config.fields.contains(field.name()) && oldFieldSchema.type().equals(Schema.Type.MAP)) {
                 Schema oldValueSchema = oldFieldSchema.valueSchema();
-                for (Map.Entry<Object,Object> entry : inputRecord.getMap(field.name()).entrySet()) {
-                    builder.field(matcher.replaceAll((String) entry.getKey()), oldValueSchema);
+                if (inputRecord.getMap(field.name()) != null) {
+                    for (Map.Entry<Object,Object> entry : inputRecord.getMap(field.name()).entrySet()) {
+                        builder.field(matcher.replaceAll((String) entry.getKey()), oldValueSchema);
+                    }
                 }
             } else {
                 fieldSchema = field.schema();
@@ -59,8 +61,10 @@ public class MapFlattenTransform<R extends ConnectRecord<R>> implements Transfor
         for (Field field : inputSchema.fields()) {
             Schema oldFieldSchema = field.schema();
             if (this.config.fields.contains(field.name()) && oldFieldSchema.type().equals(Schema.Type.MAP)) {
-                for (Map.Entry<Object,Object> entry : inputRecord.getMap(field.name()).entrySet()) {
-                    struct.put(matcher.replaceAll((String) entry.getKey()), entry.getValue());
+                if (inputRecord.getMap(field.name()) != null) {
+                    for (Map.Entry<Object, Object> entry : inputRecord.getMap(field.name()).entrySet()) {
+                        struct.put(matcher.replaceAll((String) entry.getKey()), entry.getValue());
+                    }
                 }
             } else {
                 struct.put(field.name(), inputRecord.get(field.name()));
