@@ -21,6 +21,8 @@ public class KeyValueMergerTransform<R extends ConnectRecord<R>> implements Tran
 
     @Override
     public R apply(R record) {
+        if (record.value() == null)
+            return record;
         if (null == record.keySchema() || Schema.Type.STRUCT != record.keySchema().type()) {
             log.trace("record.valueSchema() is null or record.valueSchema() is not a struct.");
             return record;

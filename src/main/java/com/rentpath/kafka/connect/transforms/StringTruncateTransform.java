@@ -21,6 +21,8 @@ public class StringTruncateTransform<R extends ConnectRecord<R>> implements Tran
 
     @Override
     public R apply(R record) {
+        if (record.value() == null)
+            return record;
         if (null == record.valueSchema() || Schema.Type.STRUCT != record.valueSchema().type()) {
             log.trace("record.valueSchema() is null or record.valueSchema() is not a struct.");
             return record;
