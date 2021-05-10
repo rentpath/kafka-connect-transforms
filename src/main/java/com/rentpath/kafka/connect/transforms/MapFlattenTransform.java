@@ -42,7 +42,6 @@ public class MapFlattenTransform<R extends ConnectRecord<R>> implements Transfor
             builder.optional();
         }
         Matcher matcher = keyMatchPattern.matcher(this.config.pattern);
-
         for (Field field : inputSchema.fields()) {
             final Schema fieldSchema;
             Schema oldFieldSchema = field.schema();
@@ -56,6 +55,39 @@ public class MapFlattenTransform<R extends ConnectRecord<R>> implements Transfor
             } else {
                 fieldSchema = field.schema();
                 builder.field(field.name(), fieldSchema);
+            }
+        }
+        if (this.config.nulledDefaultFields != null) {
+            Schema fieldSchema = null;
+            switch (this.config.nulledDefaultType) {
+                case "string":
+                    fieldSchema = Schema.OPTIONAL_STRING_SCHEMA;
+                    break;
+                case "boolean":
+                    fieldSchema = Schema.OPTIONAL_BOOLEAN_SCHEMA;
+                    break;
+                case "int":
+                    fieldSchema = Schema.OPTIONAL_INT32_SCHEMA;
+                    break;
+                case "long":
+                    fieldSchema = Schema.OPTIONAL_INT64_SCHEMA;
+                    break;
+                case "float":
+                    fieldSchema = Schema.OPTIONAL_FLOAT32_SCHEMA;
+                    break;
+                case "double":
+                    fieldSchema = Schema.OPTIONAL_FLOAT64_SCHEMA;
+                    break;
+                case "bytes":
+                    fieldSchema = Schema.OPTIONAL_BYTES_SCHEMA;
+                    break;
+            }
+            for (String nulledField : this.config.nulledDefaultFields) {
+                // if the field doesn't already exist by being set by the map...
+                if (builder.field(nulledField) == null) {
+                    // set it to the optional field type specified
+                    builder.field(nulledField, fieldSchema);
+                }
             }
         }
         Schema schema = builder.build();
