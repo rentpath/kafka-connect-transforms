@@ -22,11 +22,11 @@ public class KeyValueMergerTransform<R extends ConnectRecord<R>> implements Tran
     public R apply(R record) {
         if (record.value() == null)
             return record;
-        if (null == record.keySchema() || Schema.Type.STRUCT != record.keySchema().type() || !record.keySchema().type().isPrimitive()) {
+        if (null == record.keySchema() || !(record.keySchema().type() == Schema.Type.STRUCT || record.keySchema().type().isPrimitive())) {
             log.trace("record.valueSchema() is null or record.valueSchema() is not primitive nor is it a struct.");
             return record;
         }
-        if (null == record.valueSchema() || Schema.Type.STRUCT != record.valueSchema().type()) {
+        if (null == record.valueSchema() || record.valueSchema().type() != Schema.Type.STRUCT) {
             log.trace("record.valueSchema() is null or record.valueSchema() is not a struct.");
             return record;
         }
@@ -41,15 +41,16 @@ public class KeyValueMergerTransform<R extends ConnectRecord<R>> implements Tran
         if (inputValueSchema.isOptional()) {
             builder.optional();
         }
-        // copy the input record field schemas into the output SchemaBuilder
+        // copy the input record value field schemas into the output SchemaBuilder
         for (Field field : inputValueSchema.fields()) {
             builder.field(field.name(), field.schema());
         }
 
-        if (Schema.Type.STRUCT == record.keySchema().type()) {
+        if (record.keySchema().type() == Schema.Type.STRUCT) {
             Struct inputKeyRecord = (Struct) record.key();
             Schema inputKeySchema = inputKeyRecord.schema();
             
+            // add only the key fields into output SchemaBuilder that are passed via config
             List<Field> keyFields = new ArrayList<>();
             for (Field field : inputKeySchema.fields()) {
                 if (this.config.fields.contains(field.name())) {
@@ -58,6 +59,7 @@ public class KeyValueMergerTransform<R extends ConnectRecord<R>> implements Tran
                 }
             }
 
+            // use builder to instantiate an output struct, then add all value and neceasary key fields from the record
             Schema schema = builder.build();
             Struct struct = new Struct(schema);
             for (Field field : inputValueSchema.fields()) {
@@ -77,17 +79,18 @@ public class KeyValueMergerTransform<R extends ConnectRecord<R>> implements Tran
                 record.timestamp());
         }
         else {
-            // primitive type so will only use the first value in config.fields
+            // primitive type so will only use the first value in config.fields as fieldName; add the key to output schemaBuilder
             String keyFieldName = this.config.fields.get(0);
             builder.field(keyFieldName, record.keySchema());
 
+            // instantiate output struct, copy all record values into it
             Schema schema = builder.build();
             Struct struct = new Struct(schema);
             for (Field field : inputValueSchema.fields()) {
                 struct.put(field.name(), inputValueRecord.get(field.name()));
             }
 
-            // put the key into the output value struct
+            // put the key into the output struct
             struct.put(keyFieldName, record.key());
 
             return record.newRecord(
