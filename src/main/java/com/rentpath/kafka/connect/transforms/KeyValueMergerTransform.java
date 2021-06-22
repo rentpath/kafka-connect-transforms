@@ -23,7 +23,7 @@ public class KeyValueMergerTransform<R extends ConnectRecord<R>> implements Tran
         if (record.value() == null)
             return record;
         if (null == record.keySchema() || !(record.keySchema().type() == Schema.Type.STRUCT || record.keySchema().type().isPrimitive())) {
-            log.trace("record.valueSchema() is null or record.valueSchema() is not primitive nor is it a struct.");
+            log.trace("record.keySchema() is null or record.keySchema() is not primitive nor is it a struct.");
             return record;
         }
         if (null == record.valueSchema() || record.valueSchema().type() != Schema.Type.STRUCT) {
