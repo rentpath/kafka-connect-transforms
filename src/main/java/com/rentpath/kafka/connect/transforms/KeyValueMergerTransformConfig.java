@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class KeyValueMergerTransformConfig extends AbstractConfig {
     public static final String FIELDS_CONF = "fields";
-    static final String FIELDS_DOC = "The fields in the source record key to merge into the value";
+    static final String FIELDS_DOC = "If attempting to merge a struct key these are the fields in the source record key to merge into the value. If attempting to merge a primitive key this will be the field name the key gets merged into the value under and only the first entry is used";
 
     public List<String> fields;
 
