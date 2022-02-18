@@ -47,11 +47,13 @@ public class StringTruncateTransform<R extends ConnectRecord<R>> implements Tran
             if (this.config.fieldLengths.containsKey(field.name()) &&
                     field.schema().type() == Schema.Type.STRING) {
                 String v = inputRecord.getString(field.name());
-                Integer maxLength = this.config.fieldLengths.get(field.name());
-                if (v.length() > maxLength)
-                    struct.put(field.name(), v.substring(0, maxLength - 1));
-                else
-                    struct.put(field.name(), v);
+                if (v != null) {
+                    Integer maxLength = this.config.fieldLengths.get(field.name());
+                    if (v.length() > maxLength)
+                        struct.put(field.name(), v.substring(0, maxLength - 1));
+                    else
+                        struct.put(field.name(), v);
+                }
             } else {
                 struct.put(field.name(), inputRecord.get(field.name()));
             }
