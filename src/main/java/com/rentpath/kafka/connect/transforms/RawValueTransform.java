@@ -30,7 +30,7 @@ public class RawValueTransform<R extends ConnectRecord<R>> implements Transforma
             return record;
 
         final SchemaBuilder builder = SchemaBuilder.struct();
-        builder.field(this.config.field, Schema.BYTES_SCHEMA);
+        builder.field(this.config.field, record.valueSchema());
         Schema schema = builder.build();
         Struct struct = new Struct(schema);
         struct.put(this.config.field, record.value());
