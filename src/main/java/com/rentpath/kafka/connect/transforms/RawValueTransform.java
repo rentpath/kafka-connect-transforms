@@ -14,6 +14,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+ This transform is used to take the raw bytes from a message with ByteArray value and wrap it in a struct with the
+ original value represented as a single field in that struct (as configured by the `field` parameter), such that it
+ may be consumed by connectors that _require_ structs such as the JDBC Sink Connector.
+*/
 public class RawValueTransform<R extends ConnectRecord<R>> implements Transformation<R> {
     private static final Logger log = LoggerFactory.getLogger(RawValueTransform.class);
 
