@@ -68,7 +68,7 @@ public class UnionResolverTransform<R extends ConnectRecord<R>> implements Trans
                 Struct union = inputRecord.getStruct(field.name());
                 String selectedPriorityType = null;
                 Object priorityValue;
-                for (String priorityType : config.typePriorities) {
+                for (String priorityType : config.resolutionPriorities) {
                     priorityValue = union.get(priorityType);
                     if (priorityValue != null) {
                         selectedPriorityType = priorityType;
@@ -78,7 +78,7 @@ public class UnionResolverTransform<R extends ConnectRecord<R>> implements Trans
                 if (selectedPriorityType != null) {
                     fieldSchema = resolveTypeSchema(selectedPriorityType, field.schema().isOptional());
                 } else {
-                    fieldSchema = resolveTypeSchema(config.typePriorities.get(0), field.schema().isOptional());
+                    fieldSchema = resolveTypeSchema(config.resolutionPriorities.get(0), field.schema().isOptional());
                 }
             } else {
                 fieldSchema = field.schema();

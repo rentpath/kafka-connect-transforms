@@ -13,24 +13,24 @@ import java.util.Map;
 */
 public class UnionResolverTransformConfig extends AbstractConfig {
     // example: "content"
-    public static final String FIELDS_CONF = "field";
-    public static final String TYPE_PRIORITIES_CONF = "type.priorities";
+    public static final String FIELDS_CONF = "fields";
+    public static final String RESOLUTION_PRIORITIES = "resolution.priorities";
     static final String FIELDS_DOC = "Comma-delimited list of fields to apply the union resolution to";
-    static final String TYPE_PRIORITIES_DOC = "Comma-delimited list of types to use from the union in order of priority";
+    static final String RESOLUTION_PRIORITIES_DOC = "Comma-delimited list of types to use from the union in order of priority";
 
     public final List<String> fields;
-    public final List<String> typePriorities;
+    public final List<String> resolutionPriorities;
 
     public UnionResolverTransformConfig(Map<String, ?> parsedConfig) {
         super(config(), parsedConfig);
         this.fields = getList(FIELDS_CONF);
-        this.typePriorities = getList(TYPE_PRIORITIES_CONF);
+        this.resolutionPriorities = getList(RESOLUTION_PRIORITIES);
     }
 
     static ConfigDef config() {
         return new ConfigDef()
                 .define(FIELDS_CONF, ConfigDef.Type.LIST, null, ConfigDef.Importance.HIGH, FIELDS_DOC)
-                .define(TYPE_PRIORITIES_CONF, ConfigDef.Type.LIST, null, ConfigDef.Importance.HIGH, TYPE_PRIORITIES_DOC);
+                .define(RESOLUTION_PRIORITIES, ConfigDef.Type.LIST, null, ConfigDef.Importance.HIGH, RESOLUTION_PRIORITIES_DOC);
     }
 }
 
