@@ -68,11 +68,13 @@ public class UnionResolverTransform<R extends ConnectRecord<R>> implements Trans
                 Struct union = inputRecord.getStruct(field.name());
                 String selectedPriorityType = null;
                 Object priorityValue;
-                for (String priorityType : config.resolutionPriorities) {
-                    priorityValue = union.get(priorityType);
-                    if (priorityValue != null) {
-                        selectedPriorityType = priorityType;
-                        break;
+                if (union != null) {
+                    for (String priorityType : config.resolutionPriorities) {
+                        priorityValue = union.get(priorityType);
+                        if (priorityValue != null) {
+                            selectedPriorityType = priorityType;
+                            break;
+                        }
                     }
                 }
                 if (selectedPriorityType != null) {
@@ -89,20 +91,25 @@ public class UnionResolverTransform<R extends ConnectRecord<R>> implements Trans
         Struct struct = new Struct(schema);
         for (Field field : inputSchema.fields()) {
             if (this.config.fields.contains(field.name()) && field.schema().type() == Schema.Type.STRUCT) {
-                switch (schema.field(field.name()).schema().type()) {
-                    case INT32:
-                        struct.put(field.name(), inputRecord.getStruct(field.name()).getInt32("int"));
-                        break;
-                    case INT64:
-                        struct.put(field.name(), inputRecord.getStruct(field.name()).getInt64("long"));
-                        break;
-                    case FLOAT32:
-                        struct.put(field.name(), inputRecord.getStruct(field.name()).getFloat32("float"));
-                        break;
-                    case FLOAT64:
-                        struct.put(field.name(), inputRecord.getStruct(field.name()).getFloat64("double"));
-                        break;
+                Struct inputStruct = inputRecord.getStruct(field.name());
+                Object outValue = null;
+                if (inputStruct != null) {
+                    switch (schema.field(field.name()).schema().type()) {
+                        case INT32:
+                            outValue = inputStruct.getInt32("int");
+                            break;
+                        case INT64:
+                            outValue = inputStruct.getInt64("long");
+                            break;
+                        case FLOAT32:
+                            outValue = inputStruct.getFloat32("float");
+                            break;
+                        case FLOAT64:
+                            outValue = inputStruct.getFloat64("double");
+                            break;
+                    }
                 }
+                struct.put(field.name(), outValue);
             } else {
                 struct.put(field.name(), inputRecord.get(field.name()));
             }
