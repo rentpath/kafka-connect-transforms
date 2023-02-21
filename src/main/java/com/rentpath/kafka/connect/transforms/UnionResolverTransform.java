@@ -27,12 +27,16 @@ public class UnionResolverTransform<R extends ConnectRecord<R>> implements Trans
         switch (type) {
             case "int":
                 builder = SchemaBuilder.int32();
+                break;
             case "long":
                 builder = SchemaBuilder.int64();
+                break;
             case "float":
                 builder = SchemaBuilder.float32();
+                break;
             case "double":
                 builder = SchemaBuilder.float64();
+                break;
         }
         if (builder != null) {
             if (isOptional)
