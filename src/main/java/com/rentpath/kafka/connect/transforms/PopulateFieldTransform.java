@@ -25,6 +25,10 @@ public class PopulateFieldTransform<R extends ConnectRecord<R>> implements Trans
     public R apply(R record) {
         if (record.value() == null)
             return record;
+        if (null == record.valueSchema() || Schema.Type.STRUCT != record.valueSchema().type()) {
+            log.trace("record.valueSchema() is null or record.valueSchema() is not a struct.");
+            return record;
+        }
 
         Struct inputRecord = (Struct) record.value();
         Schema inputSchema = inputRecord.schema();
@@ -36,14 +40,12 @@ public class PopulateFieldTransform<R extends ConnectRecord<R>> implements Trans
         if (inputSchema.isOptional()) {
             builder.optional();
         }
-
         for (Field field : inputSchema.fields()) {
             builder.field(field.name(), field.schema());
         }
 
         Schema schema = builder.build();
         Struct struct = new Struct(schema);
-
         for (Field field : schema.fields()) {
             Object outValue = inputRecord.get(field.name());
             if (this.config.targetField.equals(field.name()) && outValue == null) {
