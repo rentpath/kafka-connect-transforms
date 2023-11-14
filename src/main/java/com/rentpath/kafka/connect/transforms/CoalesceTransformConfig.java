@@ -9,7 +9,7 @@ import java.util.Map;
 /*
  This transform is used to set a target field depending on the first non-null value between itself and a list of contributing fields.
  */
-public class PopulateFieldTransformConfig extends AbstractConfig {
+public class CoalesceTransformConfig extends AbstractConfig {
 
     public static final String TARGET_FIELD_CONF = "target.field";
     static final String TARGET_FIELD_DOC = "The field name for the target field we want to set";
@@ -21,7 +21,7 @@ public class PopulateFieldTransformConfig extends AbstractConfig {
     public final String targetField;
     public final List<String> contributorFields;
 
-    public PopulateFieldTransformConfig(Map<String, ?> parsedConfig) {
+    public CoalesceTransformConfig(Map<String, ?> parsedConfig) {
         super(config(), parsedConfig);
         this.targetField = getString(TARGET_FIELD_CONF);
         this.contributorFields = getList(CONTRIBUTOR_FIELDS_CONF);

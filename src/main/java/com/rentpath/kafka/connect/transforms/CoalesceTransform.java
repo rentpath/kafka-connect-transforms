@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /*
- This transform is used to set a target field depending on the first non-null value between itself and a list of contributing fields.
+ This transform, which gets its name and function from the 'Coalesce' SQL function, is used to set a target field based on the first non-null value between itself and a list of contributing fields.
  */
-public class PopulateFieldTransform<R extends ConnectRecord<R>> implements Transformation<R> {
+public class CoalesceTransform<R extends ConnectRecord<R>> implements Transformation<R> {
     private static final Logger log = LoggerFactory.getLogger(MapFlattenTransform.class);
 
-    private PopulateFieldTransformConfig config;
+    private CoalesceTransformConfig config;
 
     @Override
     public R apply(R record) {
@@ -50,10 +50,10 @@ public class PopulateFieldTransform<R extends ConnectRecord<R>> implements Trans
             Object outValue = inputRecord.get(field.name());
             if (this.config.targetField.equals(field.name()) && outValue == null) {
                 for (String contributorFieldName : this.config.contributorFields) {
-                    if (inputRecord.get(contributorFieldName) != null) {
+                    outValue = inputRecord.get(contributorFieldName);
+                    if (outValue != null) {
                         Schema.Type contributorFieldType = inputSchema.field(contributorFieldName).schema().type();
                         if (contributorFieldType == field.schema().type()) {
-                            outValue = inputRecord.get(contributorFieldName);
                             break;
                         } else {
                             throw new DataException(String.format("Fields are of different types. " +
@@ -80,7 +80,7 @@ public class PopulateFieldTransform<R extends ConnectRecord<R>> implements Trans
 
     @Override
     public ConfigDef config() {
-        return PopulateFieldTransformConfig.config();
+        return CoalesceTransformConfig.config();
     }
 
     @Override
@@ -89,6 +89,6 @@ public class PopulateFieldTransform<R extends ConnectRecord<R>> implements Trans
 
     @Override
     public void configure(Map<String, ?> map) {
-        this.config = new PopulateFieldTransformConfig(map);
+        this.config = new CoalesceTransformConfig(map);
     }
 }
