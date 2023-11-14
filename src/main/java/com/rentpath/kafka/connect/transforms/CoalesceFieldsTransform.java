@@ -16,10 +16,10 @@ import java.util.Map;
 /*
  This transform, which gets its name and function from the 'Coalesce' SQL function, is used to set a target field based on the first non-null value between itself and a list of contributing fields.
  */
-public class CoalesceTransform<R extends ConnectRecord<R>> implements Transformation<R> {
+public class CoalesceFieldsTransform<R extends ConnectRecord<R>> implements Transformation<R> {
     private static final Logger log = LoggerFactory.getLogger(MapFlattenTransform.class);
 
-    private CoalesceTransformConfig config;
+    private CoalesceFieldsTransformConfig config;
 
     @Override
     public R apply(R record) {
@@ -80,7 +80,7 @@ public class CoalesceTransform<R extends ConnectRecord<R>> implements Transforma
 
     @Override
     public ConfigDef config() {
-        return CoalesceTransformConfig.config();
+        return CoalesceFieldsTransformConfig.config();
     }
 
     @Override
@@ -89,6 +89,6 @@ public class CoalesceTransform<R extends ConnectRecord<R>> implements Transforma
 
     @Override
     public void configure(Map<String, ?> map) {
-        this.config = new CoalesceTransformConfig(map);
+        this.config = new CoalesceFieldsTransformConfig(map);
     }
 }
