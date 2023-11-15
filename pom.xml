@@ -4,7 +4,7 @@
   <groupId>com.rentpath</groupId>
   <artifactId>kafka-connect-transforms</artifactId>
   <name>Kafka Connect Transforms</name>
-  <version>0.1.14-SNAPSHOT</version>
+  <version>0.1.14</version>
   <url>https://github.com/rentpath/kafka-connect-transforms</url>
   <developers>
     <developer>
@@ -42,7 +42,7 @@
     <connection>scm:git:git://github.com/rentpath/kafka-connect-transforms.git</connection>
     <developerConnection>scm:git:git@github.com:rentpath/kafka-connect-transforms.git</developerConnection>
     <url>https://github.com/rentpath/kafka-connect-transforms</url>
-    <tag>HEAD</tag>
+    <tag>kafka-connect-transforms-0.1.14</tag>
   </scm>
   <distributionManagement>
     <snapshotRepository>
